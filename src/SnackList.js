@@ -22,13 +22,14 @@ export default class SnackList extends PureComponent<{}> {
   render() {
     return <Main>
       <SnackConsumer>
-        {({ messages }) => <ReactCSSTransitionGroup
+        {({ messages, removeMessage }) => <ReactCSSTransitionGroup
           transitionName={className}
           transitionEnterTimeout={TRANSITION}
           transitionLeaveTimeout={TRANSITION}
         >
           {messages.map(({ key, message }: {key: string, message: Message}) => <Snack
             className={className}
+            onClose={() => removeMessage(key)}
             key={key}
             {...message}
           />)}

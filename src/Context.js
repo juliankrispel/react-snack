@@ -51,6 +51,15 @@ export class SnackProvider extends Component<Props, State> {
     this._timeouts.forEach(timeout => clearTimeout(timeout))
   }
 
+  removeMessage = (id: string) => {
+    const { messages: _messages } = this.state
+    _messages.delete(id)
+
+    this.setState({
+      messages: _messages
+    })
+  }
+
   addMessage = (message: Message) => {
     const { messages } = this.state
     const id = uuid()
@@ -65,7 +74,7 @@ export class SnackProvider extends Component<Props, State> {
       this.setState({
         messages: _messages
       })
-    }, this.props.timeout))
+    }, message.timeout != null ? message.timeout : this.props.timeout))
 
     this.setState({
       messages: messages.set(id, message)
@@ -84,7 +93,8 @@ export class SnackProvider extends Component<Props, State> {
             message
           }] : acc
         }, []),
-      addMessage: this.addMessage
+      addMessage: this.addMessage,
+      removeMessage: this.removeMessage
     }
   }
 
