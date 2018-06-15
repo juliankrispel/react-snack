@@ -1,4 +1,6 @@
 [ignore]
+.*/example/node_modules/.*
+.*/node_modules/styled-components/dist/styled-components.es.js
 
 [include]
 
@@ -7,5 +9,9 @@
 [lints]
 
 [options]
+module.system=haste
 
 [strict]
+
+[version]
+^0.74.0

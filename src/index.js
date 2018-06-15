@@ -1,26 +1,12 @@
-/**
- * @class ExampleComponent
- */
+// @flow
 
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { SnackProvider, SnackConsumer } from './Context'
+import Snack from './Snack'
+import SnackList from './SnackList'
 
-import styles from './styles.css'
-
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
-
-  render() {
-    const {
-      text
-    } = this.props
-
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
+export {
+  SnackProvider,
+  SnackConsumer,
+  SnackList,
+  Snack
 }
