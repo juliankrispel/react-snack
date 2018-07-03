@@ -28,6 +28,7 @@
     ]
   },
   "dependencies": {
+    "documentation": "^8.0.0",
     "rollup-plugin-babel-minify": "^5.0.0",
     "rollup-plugin-uglify": "^4.0.0",
     "uuid": "^3.2.1"
