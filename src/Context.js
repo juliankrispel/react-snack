@@ -5,6 +5,7 @@ import type { Node } from 'react'
 import uuid from 'uuid/v1'
 
 import { DURATION } from './constants'
+import SnackList from './SnackList'
 import type { Message } from './types'
 
 type ContextType = {
@@ -12,7 +13,7 @@ type ContextType = {
     key: string,
     message: Message
   }>,
-  addMessage: Message => void,
+  addMessage: Message => void
 }
 
 const contextType: ContextType = {
@@ -24,27 +25,37 @@ const Context = createContext(contextType)
 
 export const SnackConsumer = Context.Consumer
 
-type Props = {
+type Props = {|
   children: Node,
-  timeout: number
-}
+  timeout?: number,
+  initialMessages?: Array<Message>,
+  colors?: ?{
+    ERROR?: string,
+    SUCCESS?: string,
+    INFO?: string,
+  },
+|}
 
 type State = {
   messages: Map<string, Message>
 }
 
-const initialMessages: Map<string, Message> = new Map()
-
 export class SnackProvider extends Component<Props, State> {
   _timeouts: Array<number>
   _timeouts = []
+
+  componentDidMount() {
+    if (this.props.initialMessages != null) {
+      this.props.initialMessages.forEach(this.addMessage)
+    }
+  }
 
   static defaultProps = {
     timeout: DURATION
   }
 
   state = {
-    messages: initialMessages
+    messages: new Map()
   }
 
   componentWillUnmount() {
@@ -60,47 +71,61 @@ export class SnackProvider extends Component<Props, State> {
     })
   }
 
-  addMessage = (message: Message) => {
+  addMessage = (message: Message): string => {
     const { messages } = this.state
     const id = uuid()
 
-    this._timeouts.push(setTimeout(() => {
-      const _messages = messages
-      _messages.delete(id)
+    if (message.disableTimeout !== true) {
+      this._timeouts.push(
+        setTimeout(() => {
+          const _messages = messages
+          _messages.delete(id)
 
-      // release timeout
-      this._timeouts.shift()
+          // release timeout
+          this._timeouts.shift()
 
-      this.setState({
-        messages: _messages
-      })
-    }, message.timeout != null ? message.timeout : this.props.timeout))
+          this.setState({
+            messages: _messages
+          })
+        }, message.timeout != null ? message.timeout : this.props.timeout)
+      )
+    }
 
     this.setState({
-      messages: messages.set(id, message)
+      messages: messages.set(id, { type: 'INFO', ...message })
     })
+
+    return id
   }
 
   buildValue = () => {
     const { messages } = this.state
     return {
-      messages: Array.from(messages.keys())
-        .reduce((acc, key) => {
-          const message = messages.get(key)
+      messages: Array.from(messages.keys()).reduce((acc, key) => {
+        const message = messages.get(key)
 
-          return message != null ? [...acc, {
-            key,
-            message
-          }] : acc
-        }, []),
+        return message != null
+          ? [
+              ...acc,
+              {
+                key,
+                message
+              }
+            ]
+          : acc
+      }, []),
       addMessage: this.addMessage,
       removeMessage: this.removeMessage
     }
   }
 
   render() {
-    return <Context.Provider value={this.buildValue()}>
-      {this.props.children}
-    </Context.Provider>
+    const { colors, children } = this.props
+    return (
+      <Context.Provider value={this.buildValue()}>
+        {children}
+        <SnackList colors={colors}/>
+      </Context.Provider>
+    )
   }
 }

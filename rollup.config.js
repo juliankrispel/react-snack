@@ -4,6 +4,7 @@ import external from 'rollup-plugin-peer-deps-external'
 import postcss from 'rollup-plugin-postcss'
 import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
+import minify from 'rollup-plugin-babel-minify';
 
 import pkg from './package.json'
 
@@ -12,11 +13,13 @@ export default {
   output: [
     {
       file: pkg.main,
-      format: 'cjs'
+      format: 'cjs',
+      sourcemap: true
     },
     {
       file: pkg.module,
-      format: 'es'
+      format: 'es',
+      sourcemap: true
     }
   ],
   plugins: [
@@ -34,6 +37,7 @@ export default {
       namedExports: {
         'node_modules/react-is/index.js': ['isValidElementType']
       }
-    })
+    }),
+    minify()
   ]
 }

@@ -5,11 +5,4 @@ import Snack from './Snack'
 import SnackList from './SnackList'
 import { TYPES, COLORS } from './constants'
 
-export {
-  SnackProvider,
-  SnackConsumer,
-  SnackList,
-  Snack,
-  TYPES,
-  COLORS
-}
+export { SnackProvider, SnackConsumer, SnackList, Snack, TYPES, COLORS }

@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import styled from 'styled-components'
 
-import { TRANSITION } from './constants'
+import { TRANSITION, COLORS } from './constants'
 import Snack from './Snack'
 import { SnackConsumer } from './Context'
 import type { Message } from './types'
@@ -14,27 +14,55 @@ const className = 'snack-list-transition'
 const Main = styled.div`
   position: fixed;
   right: 0;
-  width: 350px;
+  text-align: right;
+  height: 100%;
+  overflow: auto;
+  z-index: 9999;
   top: 0;
 `
 
-export default class SnackList extends PureComponent<{}> {
+type Props = {
+  colors?: ?{
+    ERROR?: string,
+    SUCCESS?: string,
+    INFO?: string,
+  },
+}
+
+export default class SnackList extends PureComponent<Props> {
+  static defaultProps = {
+    colors: COLORS
+  }
+
   render() {
-    return <Main>
-      <SnackConsumer>
-        {({ messages, removeMessage }) => <ReactCSSTransitionGroup
-          transitionName={className}
-          transitionEnterTimeout={TRANSITION}
-          transitionLeaveTimeout={TRANSITION}
-        >
-          {messages.map(({ key, message }: {key: string, message: Message}) => <Snack
-            className={className}
-            onClose={() => removeMessage(key)}
-            key={key}
-            {...message}
-          />)}
-        </ReactCSSTransitionGroup>}
-      </SnackConsumer>
-    </Main>
+    return (
+      <Main>
+        <SnackConsumer>
+          {({ messages, removeMessage }) => (
+            <ReactCSSTransitionGroup
+              transitionName={className}
+              transitionEnterTimeout={TRANSITION}
+              transitionLeaveTimeout={TRANSITION}
+            >
+              {messages.reverse().map(
+                ({ key, message }: { key: string, message: Message }) => {
+                  const props = {
+                    className,
+                    onClose: () => removeMessage(key),
+                    color: this.props.colors[message.type],
+                    key,
+                    ...message
+                  }
+
+                  return message.component != null
+                    ? <message.component {...props} />
+                    : <Snack {...props} />
+                }
+              )}
+            </ReactCSSTransitionGroup>
+          )}
+        </SnackConsumer>
+      </Main>
+    )
   }
 }

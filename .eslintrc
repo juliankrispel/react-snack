@@ -1,11 +1,17 @@
 {
   "parser": "babel-eslint",
   "extends": [
-    "standard",
-    "standard-react"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:flowtype/recommended",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react"
   ],
   "env": {
-    "es6": true
+    "es6": true,
+    "browser": true,
+    "jest": true
   },
   "plugins": [
     "react",
