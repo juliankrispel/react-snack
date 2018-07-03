@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component, createContext } from 'react'
-import type { Node } from 'react'
 import uuid from 'uuid/v1'
 
 import { DURATION } from './constants'
@@ -25,8 +24,11 @@ const Context = createContext(contextType)
 
 export const SnackConsumer = Context.Consumer
 
-type Props = {|
-  children: Node,
+/**
+ * SnackProvider Props
+ */
+type SnackProviderProps = {|
+  children: React.Node,
   timeout?: number,
   initialMessages?: Array<Message>,
   colors?: ?{
@@ -40,7 +42,10 @@ type State = {
   messages: Map<string, Message>
 }
 
-export class SnackProvider extends Component<Props, State> {
+/**
+ * SnackProvider class
+ */
+export class SnackProvider extends Component<SnackProviderProps, State> {
   _timeouts: Array<number>
   _timeouts = []
 

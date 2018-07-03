@@ -1,10 +1,13 @@
 // @flow
-import type { Node, Component } from 'react'
+import React, { type Component } from 'react'
 
+/**
+ * Message
+ */
 export type Message = {
   type?: 'ERROR' | 'SUCCESS' | 'INFO',
-  title: Node,
-  message: Node,
+  title: React.Node,
+  message: React.Node,
   disableTimeout?: ?boolean,
   disableIcon?: ?boolean,
   component?: Component,
