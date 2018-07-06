@@ -2,6 +2,15 @@
 
 > Snacks, lots of them
 
+![lol](/demo.gif)
+
+**tl;dr** react-snack provides an out of the box (but completely configurable) in-app notification system for web-apps. All you need to get started are adding two components to your App.
+
+react-snack is an easy to use In-App Notification system for react. The design of the feature inspired by the Material UI hence the name - but it doesn't implement the Material Design spec. react-snack abstracts a lot of the boilerplate that usually goes into writing such systems. State management is implemented with react's [Context API](https://reactjs.org/docs/context.html).
+
+> This module is still in alpha but satisfies a web-app feature I've implemented too many times across different projects I worked on. Please if you have ideas for features, opinions or want to get involved, [talk to me 😍](/issues/new).
+
+
 [![NPM](https://img.shields.io/npm/v/react-snack.svg)](https://www.npmjs.com/package/react-snack) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 Snackbar like notifications for react. Completely customizable but with batteries included!
@@ -14,14 +23,16 @@ yarn add react-snack
 
 ## Usage
 
-React-snack uses the [React.Context API](https://reactjs.org/docs/context.html) introduced in React 16.3.
-
 First Wrap your app in a `SnackProvider`
+
+``
 
 ```jsx
 import { SnackProvider } from 'react-snack'
 
-ReactDOM.render(<SnackProvider><App /></SnackProvider>, document.getElementById('root'))
+ReactDOM.render(<SnackProvider
+  renderSnack={renderCustomSnackBar}
+><App /></SnackProvider>, document.getElementById('root'))
 ```
 
 Then simply use the SnackConsumer to add messages to the snack bar anywhere in your app:
@@ -42,6 +53,15 @@ render() {
   </SnackConsumer>
 }
 ```
+
+## Advanced Usage & Styling
+
+Typically you only need the SnackProvider
+
+## API
+
+### SnackProvider
+
 
 ## License
 

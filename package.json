@@ -11,7 +11,7 @@
   "scripts": {
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "flow": "flow",
-    "apidocs": "documentation build src/index.js -f md -o docs/apidocs.md",
+    "apidocs": "documentation build src/index.js -f json -o docs/apidocs.json",
     "lint": "eslint src",
     "prettier": "prettier src/**/*.js --write",
     "precommit": "lint-staged && yarn run lint && yarn run flow && yarn run test",

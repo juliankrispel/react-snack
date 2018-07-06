@@ -8,7 +8,31 @@ const Main = styled.div`
   height: 100%;
   position: relative;
   width: 100%;
+  pre {
+    white-space: pre-wrap;
+    background: white;
+    color: #7b7b7b;
+    padding: .5em;
+    margin: 0;
+    width: 100%;
+    margin-top: 1em;
+    border-radius: 5px;
+  }
 `
+
+const providerExample = `import { SnackProvider } from 'react-snack'
+
+ReactDOM.render(<SnackProvider><App /></SnackProvider>, document.getElementById('root'))`
+
+
+const consumerExample = `<SnackConsumer>
+  {({ addMessage }) => (
+    <button onClick={() => addMessage({
+      title: 'You clicked the button',
+      message: 'Lol'
+    })}>Click me to add a notification</button>
+  )}
+</SnackConsumer>`
 
 const RadioButton = styled.label`
   display: flex;
@@ -113,9 +137,50 @@ const Highlight = styled.button`
   padding: 0.5em;
 `
 
+class AddMessages extends Component {
+  componentDidMount() {
+    const { addMessage } = this.props
+
+
+    setTimeout(() => {
+      addMessage({
+        title: 'This is react-snack',
+        type: 'INFO',
+        message: 'A notification system, sweet as applie pie 🥧'
+      })
+    }, 2000)
+
+    setTimeout(() => {
+      addMessage({
+        title: 'You only need 3 lines to integrate it',
+        type: 'SUCCESS',
+        message: (<div>
+          <span>First, wrap your App in a SnackProvider.</span>
+          <pre>{providerExample}</pre>
+        </div>)
+      })
+    }, 4000)
+
+    setTimeout(() => {
+      addMessage({
+        title: 'To complete the setup...',
+        disableIcon: true,
+        message: (<div>
+          <span>Use SnackConsumer to trigger notifications</span>
+          <pre>{consumerExample}</pre>
+        </div>)
+      })
+    }, 6000)
+  }
+
+  render () {
+    return null
+  }
+}
+
 const initialMessages = [{
   title: 'Info message',
-  message: 'This is a message of type "info". It\'s more of a general kinda message',
+  message: 'This is a message of type "info". It\'s more of a general kinda message 😀',
   disableTimeout: true,
   type: 'INFO'
 }, {
@@ -159,9 +224,10 @@ export default class App extends Component {
   render () {
     return (
       <Main>
-        <SnackProvider initialMessages={initialMessages}>
+        <SnackProvider>
           <SnackConsumer>
             {({ addMessage }) => <Fragment>
+              <AddMessages addMessage={addMessage} />
               <Content>
                 <Title>react-snack</Title>
 

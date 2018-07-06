@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   text-align: left;
   padding: 20px 20px 0px 20px;
   height: auto;
-  max-height: 200px;
+  max-height: 500px;
 
   &.${props => props.className}-enter {
     max-height: 0px;
@@ -31,13 +31,14 @@ const Wrapper = styled.div`
 const Main = styled.div`
   position: relative;
   display: flex;
+  width: 100%;
   transform: scale(1);
   border-radius: 3px;
   border: 1px solid #eee;
   background: #f7f7f7;
   padding: 15px;
-  max-width: 400px;
-  padding-right: 60px;
+  width: 500px;
+  max-width: 100%;
 `
 
 const IconContainer = styled.div`
@@ -49,6 +50,7 @@ const IconContainer = styled.div`
 
 const Title = styled.h4`
   font-size: 14px;
+  padding-right: 40px;
   line-height: 1.3em;
   color: #505050;
   margin: 0;
@@ -103,6 +105,10 @@ const icons = {
   INFO: InfoIcon
 }
 
+const TitleAndMessage = styled.div`
+  width: 100%;
+`
+
 export default class Snack extends PureComponent<Props> {
   render() {
     const { disableIcon, icon, color, title, type, message, className, onClose } = this.props
@@ -115,10 +121,10 @@ export default class Snack extends PureComponent<Props> {
           {disableIcon !== true && <IconContainer>
             <Icon color={color}/>
           </IconContainer>}
-          <div>
+          <TitleAndMessage>
             <Title type={type}>{title}</Title>
             <Message>{message}</Message>
-          </div>
+          </TitleAndMessage>
           <Cross onClick={onClose}/>
         </Main>
       </Wrapper>
