@@ -1,10 +1,9 @@
 # react-snack
 
-> Snacks, lots of them
+### **tl;dr** react-snack provides an out of the box (completely configurable) in-app notification system for web-apps. All you need to get started are adding two components to your App.
 
-![lol](/demo.gif)
+![lol](demo.gif)
 
-**tl;dr** react-snack provides an out of the box (but completely configurable) in-app notification system for web-apps. All you need to get started are adding two components to your App.
 
 react-snack is an easy to use In-App Notification system for react. The design of the feature inspired by the Material UI hence the name - but it doesn't implement the Material Design spec. react-snack abstracts a lot of the boilerplate that usually goes into writing such systems. State management is implemented with react's [Context API](https://reactjs.org/docs/context.html).
 
@@ -61,6 +60,17 @@ Typically you only need the SnackProvider
 ## API
 
 ### SnackProvider
+
+#### Notification
+A notification is the primary data type that's used throughout this system. It carries all the information that we need to display and configure the style, content and animation of a Notification :)
+
+
+#### Props
+
+| | | |
+|-|-|-|
+| `timeout` | `number` | optional |
+| `initialMessages` | `Array<`[Notification](#notification)`>` | optional |
 
 
 ## License
