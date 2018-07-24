@@ -1,16 +1,25 @@
 // @flow
-import React, { type Component } from 'react'
 
-/**
- * Message
- */
-export type Message = {
+import { Component, type Node } from 'react'
+
+export type SnackProps = {
+  type: 'ERROR' | 'SUCCESS' | 'INFO',
+  className: string,
+  disableIcon: boolean,
+  color: string,
+  onClose: () => void,
+  title: Node,
+  icon?: ?({color: string, width: number}) => Node,
+  notification: Node
+}
+
+export type Notification = {
   type?: 'ERROR' | 'SUCCESS' | 'INFO',
-  title: React.Node,
-  message: React.Node,
+  title: Node,
+  message: Node,
   disableTimeout?: ?boolean,
   disableIcon?: ?boolean,
-  component?: Component,
-  icon?: Component,
+  snackComponent?: Component<SnackProps>,
+  icon?: Component<{}>,
   timeout?: number
 }

@@ -4,7 +4,7 @@ import { SnackProvider, SnackConsumer } from './Context'
 import Snack from './Snack'
 import SnackList from './SnackList'
 import { TYPES, COLORS } from './constants'
-import { type Message } from './types'
+import { type Notification } from './types'
 
 export {
   SnackProvider,
@@ -15,4 +15,4 @@ export {
   COLORS,
 }
 
-export type { Message }
+export type { Notification }

@@ -1,13 +1,13 @@
 // @flow
 
-import React, { PureComponent } from 'react'
+import React, { Component, PureComponent } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import styled from 'styled-components'
 
 import { TRANSITION, COLORS } from './constants'
 import Snack from './Snack'
 import { SnackConsumer } from './Context'
-import type { Message } from './types'
+import type { Notification, SnackProps } from './types'
 
 const className = 'snack-list-transition'
 
@@ -22,6 +22,7 @@ const Main = styled.div`
 `
 
 type Props = {
+  snackComponent?: Component<SnackProps>,
   colors?: ?{
     ERROR?: string,
     SUCCESS?: string,
@@ -31,32 +32,35 @@ type Props = {
 
 export default class SnackList extends PureComponent<Props> {
   static defaultProps = {
+    snackComponent: Snack,
     colors: COLORS
   }
 
   render() {
+    const { snackComponent, colors } = this.props
+
     return (
       <Main>
         <SnackConsumer>
-          {({ messages, removeMessage }) => (
+          {({ notifications, removeNotification }) => (
             <ReactCSSTransitionGroup
               transitionName={className}
               transitionEnterTimeout={TRANSITION}
               transitionLeaveTimeout={TRANSITION}
             >
-              {messages.reverse().map(
-                ({ key, message }: { key: string, message: Message }) => {
+              {notifications.reverse().map(
+                ({ key, notification }: { key: string, notification: Notification }) => {
                   const props = {
                     className,
-                    onClose: () => removeMessage(key),
-                    color: this.props.colors[message.type],
+                    onClose: () => removeNotification(key),
+                    color: colors && colors[notification.type != null ? notification.type : 'INFO'],
                     key,
-                    ...message
+                    ...notification
                   }
 
-                  return message.component != null
-                    ? <message.component {...props} />
-                    : <Snack {...props} />
+                  return notification.snackComponent != null
+                    ? <notification.snackComponent {...props} />
+                    : <snackComponent {...props} />
                 }
               )}
             </ReactCSSTransitionGroup>

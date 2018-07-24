@@ -1,6 +1,5 @@
 [ignore]
-.*/example/node_modules/.*
-.*/node_modules/styled-components/dist/styled-components.es.js
+.*/docs/node_modules/.*
 
 [include]
 

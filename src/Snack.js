@@ -1,11 +1,12 @@
 // @flow
 
-import React, { type Node, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import SuccessIcon from './icons/Success'
 import InfoIcon from './icons/Info'
 import ErrorIcon from './icons/Error'
 import { TRANSITION } from './constants'
+import type { SnackProps } from './types'
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -88,17 +89,6 @@ Cross.defaultProps = {
   children: <span>&times;</span>
 }
 
-type Props = {
-  type: 'ERROR' | 'SUCCESS' | 'INFO',
-  className: string,
-  disableIcon: boolean,
-  color: string,
-  onClose: () => void,
-  title: Node,
-  icon?: ?({color: string, width: number}) => Node,
-  message: Node
-}
-
 const icons = {
   ERROR: ErrorIcon,
   SUCCESS: SuccessIcon,
@@ -109,9 +99,9 @@ const TitleAndMessage = styled.div`
   width: 100%;
 `
 
-export default class Snack extends PureComponent<Props> {
+export default class Snack extends PureComponent<SnackProps> {
   render() {
-    const { disableIcon, icon, color, title, type, message, className, onClose } = this.props
+    const { disableIcon, icon, color, title, type, notification, className, onClose } = this.props
 
     const Icon = icon != null ? icon : icons[type]
 
@@ -123,7 +113,7 @@ export default class Snack extends PureComponent<Props> {
           </IconContainer>}
           <TitleAndMessage>
             <Title type={type}>{title}</Title>
-            <Message>{message}</Message>
+            <Message>{notification}</Message>
           </TitleAndMessage>
           <Cross onClick={onClose}/>
         </Main>

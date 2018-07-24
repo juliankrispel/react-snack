@@ -1,23 +1,28 @@
 // @flow
 
 import React, { Component, createContext } from 'react'
+import type { Node } from 'react'
 import uuid from 'uuid/v1'
 
 import { DURATION } from './constants'
 import SnackList from './SnackList'
-import type { Message } from './types'
+import type { Notification, SnackProps } from './types'
+
+type NotificationId = string
 
 type ContextType = {
-  messages: Array<{
+  notifications: Array<{
     key: string,
-    message: Message
+    notification: Notification
   }>,
-  addMessage: Message => void
+  addNotification: Notification => void,
+  removeNotification: NotificationId => void
 }
 
 const contextType: ContextType = {
-  messages: [],
-  addMessage: () => {}
+  notifications: [],
+  addNotification: () => {},
+  removeNotification: () => {}
 }
 
 const Context = createContext(contextType)
@@ -28,9 +33,11 @@ export const SnackConsumer = Context.Consumer
  * SnackProvider Props
  */
 type SnackProviderProps = {|
-  children: React.Node,
+  children: Node,
   timeout?: number,
-  initialMessages?: Array<Message>,
+  enableSnackList?: boolean,
+  snackComponent?: Component<SnackProps>,
+  initialNotifications?: Array<Notification>,
   colors?: ?{
     ERROR?: string,
     SUCCESS?: string,
@@ -39,7 +46,7 @@ type SnackProviderProps = {|
 |}
 
 type State = {
-  messages: Map<string, Message>
+  notifications: Map<string, Notification>
 }
 
 /**
@@ -50,86 +57,87 @@ export class SnackProvider extends Component<SnackProviderProps, State> {
   _timeouts = []
 
   componentDidMount() {
-    if (this.props.initialMessages != null) {
-      this.props.initialMessages.forEach(this.addMessage)
+    if (this.props.initialNotifications != null) {
+      this.props.initialNotifications.forEach(this.addNotification)
     }
   }
 
   static defaultProps = {
-    timeout: DURATION
+    timeout: DURATION,
+    enableSnackList: true
   }
 
   state = {
-    messages: new Map()
+    notifications: new Map()
   }
 
   componentWillUnmount() {
     this._timeouts.forEach(timeout => clearTimeout(timeout))
   }
 
-  removeMessage = (id: string) => {
-    const { messages: _messages } = this.state
-    _messages.delete(id)
+  removeNotification = (id: string) => {
+    const { notifications: _notifications } = this.state
+    _notifications.delete(id)
 
     this.setState({
-      messages: _messages
+      notifications: _notifications
     })
   }
 
-  addMessage = (message: Message): string => {
-    const { messages } = this.state
+  addNotification = (notification: Notification): string => {
+    const { notifications } = this.state
     const id = uuid()
 
-    if (message.disableTimeout !== true) {
+    if (notification.disableTimeout !== true) {
       this._timeouts.push(
         setTimeout(() => {
-          const _messages = messages
-          _messages.delete(id)
+          const _notifications = notifications
+          _notifications.delete(id)
 
           // release timeout
           this._timeouts.shift()
 
           this.setState({
-            messages: _messages
+            notifications: _notifications
           })
-        }, message.timeout != null ? message.timeout : this.props.timeout)
+        }, notification.timeout != null ? notification.timeout : this.props.timeout)
       )
     }
 
     this.setState({
-      messages: messages.set(id, { type: 'INFO', ...message })
+      notifications: notifications.set(id, { type: 'INFO', ...notification })
     })
 
     return id
   }
 
   buildValue = () => {
-    const { messages } = this.state
+    const { notifications } = this.state
     return {
-      messages: Array.from(messages.keys()).reduce((acc, key) => {
-        const message = messages.get(key)
+      notifications: Array.from(notifications.keys()).reduce((acc, key) => {
+        const notification = notifications.get(key)
 
-        return message != null
+        return notification != null
           ? [
               ...acc,
               {
                 key,
-                message
+                notification
               }
             ]
           : acc
       }, []),
-      addMessage: this.addMessage,
-      removeMessage: this.removeMessage
+      addNotification: this.addNotification,
+      removeNotification: this.removeNotification
     }
   }
 
   render() {
-    const { colors, children } = this.props
+    const { colors, snackComponent, enableSnackList, children } = this.props
     return (
       <Context.Provider value={this.buildValue()}>
         {children}
-        <SnackList colors={colors}/>
+        {enableSnackList === true && <SnackList snackComponent={snackComponent} colors={colors}/>}
       </Context.Provider>
     )
   }

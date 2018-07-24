@@ -1,6 +1,6 @@
 // @flow
 
-export const DURATION = 8000
+export const DURATION = 6000
 export const TRANSITION = 300
 export const TYPES = ['ERROR', 'SUCCESS', 'INFO']
 
