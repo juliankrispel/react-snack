@@ -2,7 +2,7 @@
 
 import React from "react";
 
-export default function SuccessIcon({ width = '30px', color = "#000" }: { color: string, width?: ?string }) {
+export default function SuccessIcon({ width = '30px', color = "#000" }: { color: string, width?: string }) {
   return (
     <svg
       width={width}

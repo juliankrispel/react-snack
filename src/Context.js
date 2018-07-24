@@ -67,7 +67,7 @@ export class SnackProvider extends Component<SnackProviderProps, State> {
     enableSnackList: true
   }
 
-  state = {
+  state: State = {
     notifications: new Map()
   }
 
