@@ -36,7 +36,7 @@ type SnackProviderProps = {|
   children: Node,
   timeout?: number,
   enableSnackList?: boolean,
-  snackComponent?: Component<SnackProps>,
+  snackComponent?: React$ComponentType<SnackProps>,
   initialNotifications?: Array<Notification>,
   colors?: ?{
     ERROR?: string,

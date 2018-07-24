@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import styled from 'styled-components'
 
@@ -22,7 +22,7 @@ const Main = styled.div`
 `
 
 type Props = {
-  snackComponent?: Component<SnackProps>,
+  snackComponent?: React$ComponentType<SnackProps>,
   colors?: ?{
     ERROR?: string,
     SUCCESS?: string,
@@ -33,7 +33,6 @@ type Props = {
 export default class SnackList extends PureComponent<Props> {
   static defaultProps = {
     snackComponent: Snack,
-    colors: COLORS
   }
 
   render() {
@@ -53,7 +52,7 @@ export default class SnackList extends PureComponent<Props> {
                   const props = {
                     className,
                     onClose: () => removeNotification(key),
-                    color: colors && colors[notification.type != null ? notification.type : 'INFO'],
+                    color: (colors != null ? colors : COLORS)[notification.type != null ? notification.type : 'INFO'],
                     key,
                     ...notification
                   }

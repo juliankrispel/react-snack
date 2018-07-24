@@ -101,7 +101,7 @@ const TitleAndMessage = styled.div`
 
 export default class Snack extends PureComponent<SnackProps> {
   render() {
-    const { disableIcon, icon, color, title, type, notification, className, onClose } = this.props
+    const { disableIcon, icon, color, title, type, message, className, onClose } = this.props
 
     const Icon = icon != null ? icon : icons[type]
 
@@ -113,7 +113,7 @@ export default class Snack extends PureComponent<SnackProps> {
           </IconContainer>}
           <TitleAndMessage>
             <Title type={type}>{title}</Title>
-            <Message>{notification}</Message>
+            <Message>{message}</Message>
           </TitleAndMessage>
           <Cross onClick={onClose}/>
         </Main>
